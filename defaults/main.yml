@@ -1,5 +1,7 @@
 ---
+nvm_user: root
+nvm_user_dir: /home/{{ nvm_user }}
 nvm_version: 0.35.0
 nvm_node_version: 12.13.0
-nvm_install_path: ~/.nvm
-nvm_shell_init_file: ~/.profile
+nvm_install_path: "{{ nvm_user_dir }}/.nvm"
+nvm_shell_init_file: "{{ nvm_user_dir }}/.profile"
