@@ -6,6 +6,8 @@
   when: ansible_os_family == "Debian"
 
 - name: Install nvm {{ nvm_version }}
+  become: yes
+  become_user: "{{ user_name }}"
   git:
     repo: https://github.com/creationix/nvm.git
     dest: "{{ nvm_install_path }}"
