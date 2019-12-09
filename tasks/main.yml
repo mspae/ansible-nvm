@@ -7,7 +7,7 @@
 
 - name: Install nvm {{ nvm_version }}
   become: yes
-  become_user: "{{ user_name }}"
+  become_user: "{{ nvm_user }}"
   git:
     repo: https://github.com/creationix/nvm.git
     dest: "{{ nvm_install_path }}"
@@ -23,12 +23,16 @@
   when: nvm_source_shell_init
 
 - name: Install Node.js {{ nvm_node_version }}
+  become: yes
+  become_user: "{{ nvm_user }}"
   shell: . {{ nvm_shell_init_file }} && nvm install {{ nvm_node_version }}
   register: nvm_install_result
   changed_when: "'is already installed.' not in nvm_install_result.stderr"
   tags: nvm
 
 - name: Check if {{ nvm_node_version }} is the default Node.js version
+  become: yes
+  become_user: "{{ nvm_user }}"
   shell: . {{ nvm_shell_init_file }} && nvm ls --no-colors | grep -e 'default -> {{ nvm_node_version }}'
   register: nvm_check_default
   changed_when: False
@@ -36,6 +40,8 @@
   tags: nvm
 
 - name: Set default Node.js version to {{ nvm_node_version }}
+  become: yes
+  become_user: "{{ nvm_user }}"
   shell: . {{ nvm_shell_init_file }} && nvm alias default {{ nvm_node_version }}
   when: nvm_check_default.rc != 0
   tags: nvm
